@@ -27,3 +27,45 @@ int isOperator(char ch) {
             return 1;
         }
     }
+    return 0;
+}
+
+int main() {
+    FILE *f;
+    char ch;
+    char temp[SIZE];
+    int i = 0;
+
+    f = fopen("input.txt", "r");
+
+    if (f == NULL) {
+        printf("Error opening file.\n");
+        return 1;
+    }
+
+    printf("Lexical Tokens:\n\n");
+
+    while ((ch = fgetc(f)) != EOF) {
+        if (isalnum(ch) || ch == '_') {
+            temp[i++] = ch;
+        } else {
+            if (i > 0) {
+                temp[i] = '\0';
+                i = 0;
+
+                if (isKeyword(temp)) {
+                    printf("Keyword     : %s\n", temp);
+                } else {
+                    printf("Identifier  : %s\n", temp);
+                }
+            }
+
+            if (isOperator(ch)) {
+                printf("Operator    : %c\n", ch);
+            }
+        }
+    }
+
+    fclose(f);
+    return 0;
+}
